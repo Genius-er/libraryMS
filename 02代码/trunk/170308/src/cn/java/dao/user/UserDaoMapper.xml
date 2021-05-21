@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.java.dao.user.UserDaoImpl">
+	<!-- manager -->
+	<select id="userLogin" resultType="map" parameterType="Map">
+		select user_type, count(*) num, username from tb_user where user_id=#{user_id} and password=#{password}
+	</select>
+
+	<select id="selectUser" resultType="map" parameterType="Map">
+		select * from tb_user where user_id=#{user_id}
+	</select>
+	
+	<update id="updateUser" parameterType="Map">
+		UPDATE tb_user SET username=#{username}, password=#{password},
+		tel=#{tel}, sex=#{sex}, favorite=#{favorite}
+		WHERE user_id=#{user_id}
+	</update>
+
+	<insert id="registerUser">
+		INSERT INTO tb_user(
+			user_id,
+			username,
+			password,
+			china_name,
+			user_type,
+			tel,
+			sex,
+			favorite
+		)VALUES (
+			#{user_id},
+			#{username},
+			#{password},
+			#{china_name},
+			#{user_type},
+			#{tel},
+			#{sex},
+			#{favorite}
+		)
+	</insert>
+
+	<select id="borrow1" resultType="map" parameterType="Map">
+		select * from tb_count where isbn=#{isbn}
+	</select>
+
+	<update id="borrow2" parameterType="Map">
+		UPDATE tb_count SET lef=lef-1
+		WHERE isbn=#{isbn}
+
+	</update>
+
+	<insert id="borrow3">
+		INSERT INTO tb_borrower(
+		bb_id,
+		user_id,
+		book_id,
+		title,
+		author,
+		bb_date,
+		peality_date,
+		return_date,
+		state
+
+		)VALUES (
+		#{bb_id},
+		#{user_id},
+		#{book_id},
+		#{title},
+		#{author},
+		#{bb_date},
+		#{peality_date},
+		#{return_date},
+		#{state}
+		)
+	</insert>
+
+	<update id="return" parameterType="Map">
+		UPDATE tb_count SET left=#{left}
+		WHERE isbn=#{isbn}
+
+	</update>
+	<select id="borrowed_record" resultType="map" parameterType="Map">
+		select * from tb_borroeer where user_id=#{user_id}
+	</select>
+
+	<select id="getHotBooks" resultType="map" parameterType="Map">
+		select * from tb_book ORDER BY Lended_times DESC limit 5
+	</select>
+
+	<select id="getLikeBooks" resultType="map" parameterType="Map">
+		select * from tb_book WHERE flag1==1 OR flag2==1 OR flag3==1 OR flag4==1 ORDER BY book_type DESC limit 5
+	</select>
+
+	<select id="getWholeBooks" resultType="map" parameterType="Map">
+		select * from tb_book
+	</select>
+</mapper>

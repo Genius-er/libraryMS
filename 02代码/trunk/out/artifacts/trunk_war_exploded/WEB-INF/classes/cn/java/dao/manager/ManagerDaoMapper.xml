@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.java.dao.manager.ManagerDaoImpl">
+	<!-- manager -->
+	<select id="managerLogin" resultType="Map" parameterType="Map">
+		select count(*) num from tb_user where user_id=#{user_id} and password=#{password}
+	</select>
+
+	<insert id="AddUser">
+		INSERT INTO tb_user(user_id, username, password, china_name, tel, sex, user_type)
+		VALUES (#{user_id}, #{username}, #{password}, #{china_name}, #{tel}, #{sex}, #{user_type})
+	</insert>
+
+	<update id="UpdateUser">
+		update tb_user <set>
+		<if test="username!=null">username=#{username},</if>
+		<if test="password!=null">password=#{password},</if>
+		<if test="china_name!=null">china_name=#{china_name},</if>
+		<if test="tel!=null">tel=#{tel},</if>
+		<if test="sex!=null">sex=#{sex},</if>
+		<if test="user_type!=null">user_type=#{user_type},</if>
+		user_id=#{user_id}
+	</set>
+		where user_id=#{user_id}
+	</update>
+
+	<select id="checkManager" resultType="Map" parameterType="String">
+		select user_type from tb_user where user_id=#{user_id}
+	</select>
+
+	<select id="deleteUser" parameterType="Map">
+		delete from tb_user where user_id=#{user_id}
+	</select>
+
+	<select id="getAllBooks" resultType="Map">
+		select * from tb_book limit #{current_index}, 10
+	</select>
+
+    <select id="getAllBooksByType" resultType="Map">
+		select * from tb_book where booktype_name=#{booktype_name}
+	</select>
+
+	<select id="getBooksTotal" resultType="Map">
+		select count(*) as total from tb_book
+	</select>
+
+	<delete id="deleteBook" parameterType="Map">
+		delete from tb_book where book_id=#{book_id}
+	</delete>
+	
+	<select id="searchBook" resultType="Map" parameterType="Map">
+		select * from tb_book where (title like concat('%',#{name},'%')) or (author like concat('%',#{name},'%'));
+	</select>
+
+	<select id="getAllUsers" resultType="Map">
+		select user_id,username,china_name,user_type,sex,tel from tb_user
+	</select>
+
+	<insert id="managerAddBook" parameterType="Map">
+		INSERT into tb_book (title,author,isbn,publish,booktype_name,cover) VALUES (#{title},#{author},#{isbn},#{publish},#{booktype_name},#{cover})
+	</insert>
+
+	<update id="managerModifyBook" parameterType="Map">
+		UPDATE tb_book SET title=#{title},author=#{author},isbn=#{isbn},publish=#{publish},booktype_name=#{booktype_name},cover=#{cover} WHERE book_id=#{book_id}
+	</update>
+
+	<select id="mangerModifyBookSearchById" resultType="Map" parameterType="Map">
+		select * from tb_book where book_id=#{book_id};
+	</select>
+
+	<select id="ManagerSelectUser" resultType="Map" parameterType="Map">
+		SELECT user_id, username, password, china_name, tel, sex, user_type
+		FROM tb_user
+		WHERE user_id=#{user_id}
+	</select>
+
+	<select id="ManagerGetBookType" resultType="Map" parameterType="Map">
+		select DISTINCT booktype_name from tb_book
+	</select>
+
+</mapper>
